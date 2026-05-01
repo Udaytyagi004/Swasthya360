@@ -1,6 +1,6 @@
 import graph from "./graph.js";
 
-export const executeTriage = async (input) => {
+const executeTriage = async (input) => {
   if (!input || typeof input !== "object") {
     throw new Error(
       "Invalid input: Orchestrator requires a structured input object.",
@@ -25,10 +25,7 @@ export const executeTriage = async (input) => {
   );
 
   try {
-    const finalState = await graph.invoke(initialState, {
-      recursionLimit: 20,
-      configurable: { thread_id: Date.now().toString() },
-    });
+    const finalState = await graph.invoke(initialState, {});
 
     if (!finalState.plan || finalState.plan.length === 0) {
       console.warn(
@@ -55,3 +52,4 @@ export const executeTriage = async (input) => {
     );
   }
 };
+export default executeTriage;

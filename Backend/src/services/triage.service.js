@@ -1,15 +1,6 @@
-import { executeTriage } from "../../orchestrator/orchestrator.js";
+import executeTriage from "../orchestrator/orchestrator.js";
 
-import express from "express";
-const healthRouter = express.Router();
-
-healthRouter.post("/services", async (req, res) => {
-  const input = req.body;
-  const result = await handleRequest(input);
-  res.json(result);
-});
-
-const handleRequest = async (input) => {
+const triageService = async (input) => {
   try {
     const state = await executeTriage(input);
 
@@ -48,11 +39,13 @@ const handleRequest = async (input) => {
       message: "Unable to determine intent or generate a structured response.",
     };
   } catch (error) {
-    console.error("[HealthServices] Error handling request:", error);
+    console.error("[TriageService] Error:", error);
+
     return {
       status: "error",
       message: error.message || "Internal Server Error",
     };
   }
 };
-export default healthRouter;
+
+export default triageService;
