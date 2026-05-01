@@ -1,4 +1,13 @@
-import { executeTriage } from "../orchestrator/orchestrator.js";
+import { executeTriage } from "../../orchestrator/orchestrator.js";
+
+import express from "express";
+const healthRouter = express.Router();
+
+healthRouter.post("/services", async (req, res) => {
+  const input = req.body;
+  const result = await handleRequest(input);
+  res.json(result);
+});
 
 const handleRequest = async (input) => {
   try {
@@ -46,4 +55,4 @@ const handleRequest = async (input) => {
     };
   }
 };
-export default handleRequest;
+export default healthRouter;

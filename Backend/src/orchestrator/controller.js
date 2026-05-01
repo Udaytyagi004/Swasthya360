@@ -21,30 +21,30 @@ const ControllerSchema = z.object({
 
 const controllerAgent = async (state) => {
   const structuredLlm = model.withStructuredOutput(ControllerSchema);
+  const systemPrompt = `
+You are a medical triage planner.
 
-  const systemPrompt = `You are a Strategic Medical Triage Controller. Your goal is to design a workflow that best serves the user's immediate needs while ensuring safety.
+Task:
+- Identify intent: "chat", "medical", or "emergency"
+- Return a minimal plan using available agents
 
-  DESIGN GUIDELINES:
-  - 'chat': For greetings, general medical questions, or non-symptom queries. Usually just ["chatAgent"].
-  - 'medical': For specific symptom checking. Usually ["clinicalAgent", "actionAgent"].
-  - 'emergency': For life-threatening symptoms (chest pain, breathing issues, severe bleeding). Usually starts with ["actionAgent"] for immediate life-saving steps, followed by ["chatAgent"] or ["clinicalAgent"].
+Agents:
+- clinicalAgent → diagnosis + risk
+- actionAgent → immediate steps
+- chatAgent → conversation / clarification
 
-  DYNAMIC PLANNING RULES:
-  1. ADAPT TO SEVERITY: If severity is high (>7), prioritize "actionAgent" to provide immediate guidance.
-  2. ADAPT TO SYMPTOMS: If symptoms are vague, use "chatAgent" first to clarify before "clinicalAgent".
-  3. OPTIMIZE FLOW: Only include agents that add value to the specific user context.
+Guidelines:
+- Chat → ["chatAgent"]
+- Medical → ["clinicalAgent", "actionAgent"]
+- Emergency OR severity > 7 → ["actionAgent"] first
+- If symptoms unclear → start with ["chatAgent"]
+- Keep plan minimal (only necessary steps)
 
-  AVAILABLE AGENTS:
-  - 'clinicalAgent': Diagnostic analysis and risk assessment.
-  - 'actionAgent': Immediate medical instructions and first aid.
-  - 'chatAgent': General conversational support and information gathering.
-
-  Current Input:
-  Query: ${state.query || "None"}
-  Symptoms: ${state.symptoms ? state.symptoms.join(", ") : "None"}
-  Severity: ${state.severity || "Unknown"}/10
-  `;
-
+Input:
+Query: ${state.query || "None"}
+Symptoms: ${state.symptoms?.join(", ") || "None"}
+Severity: ${state.severity ?? "Unknown"}/10
+`;
   try {
     const response = await structuredLlm.invoke([
       ["system", systemPrompt],
