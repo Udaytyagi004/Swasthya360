@@ -24,3 +24,18 @@ const workflow = new StateGraph(State)
 const graph = workflow.compile();
 
 export default graph;
+
+// const workflow = new StateGraph(State)
+//   .addNode("controller", controllerAgent)
+//   .addNode("clinicalAgent", clinicalAgent)
+//   .addNode("actionAgent", actionAgent)
+//   .addNode("chatAgent", chatAgent)
+//   .addEdge(START, "controller")
+//   .addConditionalEdge("controller", "clinicalAgent")
+//   .addConditionalEdge("controller", "actionAgent")
+//   .addConditionalEdge("controller", "chatAgent")
+//   .addConditionalEdge("clinicalAgent", "actionAgent")
+//   .addConditionalEdge("clinicalAgent", END)
+//   .addConditionalEdge("actionAgent", END)
+//   .addConditionalEdge("actionAgent", "chatAgent")
+//   .addEdge("chatAgent", END);

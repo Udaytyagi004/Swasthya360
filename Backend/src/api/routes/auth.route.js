@@ -1,9 +1,10 @@
 import express from "express";
-const authRouter = express.Router();
+import { signup, login, logout } from "../controllers/auth.controller.js";
 
-// login APi
-authRouter.get("/login", (req, res) => {
-  res.send("Login endpoint - To be implemented");
-});
+const router = express.Router();
 
-export default authRouter;
+router.post("/signup", signup);
+router.post("/login", login);
+router.post("/logout", logout);
+
+export default router;

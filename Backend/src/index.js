@@ -2,17 +2,17 @@ import "./config/env.js";
 import express from "express";
 import cors from "cors";
 import connectDB from "./db/connection.js";
-
-import authRouter from "./api/routes/authRouter.js";
-import healthRouter from "./api/routes/healthRouter.js";
+import cookieParser from "cookie-parser";
+import authRouter from "./api/routes/auth.route.js";
+import healthRouter from "./api/routes/health.route.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+const PORT = process.env.PORT;
 
-const PORT = process.env.PORT || 3000;
-
-app.use("/", authRouter);
+app.use("/auth", authRouter);
 app.use("/health", healthRouter);
 
 connectDB()

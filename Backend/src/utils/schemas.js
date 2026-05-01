@@ -26,3 +26,17 @@ export const ClinicalAssessmentSchema = z.object({
   diagnosis: DiagnosisSchema,
   riskAssessment: RiskAssessmentSchema,
 });
+
+export const signupSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(6),
+  age: z.number().min(0).max(120).optional(),
+  gender: z.enum(["male", "female", "other"]).optional(),
+  location: z.string().optional(),
+});
+
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});

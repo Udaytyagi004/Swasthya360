@@ -1,4 +1,4 @@
-import triageService from "../../services/triage.service.js";
+import triageService from "../../orchestrator/orchestrator.js";
 
 const handleHealthRequest = async (req, res) => {
   const input = req.body;
