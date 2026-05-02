@@ -61,9 +61,8 @@ const AuthPage = ({ type = 'login' }) => {
       
       navigate('/home');
     } catch (error) {
-      console.error('Auth Error:', error);
       const message = error.response?.data?.message || error.response?.data?.error || 'Auth failed. Please check your credentials.';
-      alert(message);
+      console.error('Auth failure:', message);
     } finally {
       setLoading(false);
     }

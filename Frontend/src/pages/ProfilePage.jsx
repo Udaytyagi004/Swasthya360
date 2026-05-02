@@ -22,9 +22,9 @@ const ProfilePage = () => {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [prompts, setPrompts] = useState({
-    clinicalAgent: "You are a clinical assessment agent. Your goal is to analyze symptoms and provide a potential diagnosis...",
-    actionAgent: "You are an action agent. Your goal is to provide actionable advice, cures, and preventive measures based on the diagnosis...",
-    chatAgent: "You are a friendly medical chat assistant. Help the user with their general medical queries..."
+    CONTROLLER_AGENT: "",
+    CLINICAL_AGENT: "",
+    CHAT_AGENT: ""
   });
 
   useEffect(() => {
@@ -35,7 +35,6 @@ const ProfilePage = () => {
         localStorage.setItem('user', JSON.stringify(user));
       } catch (error) {
         console.error('Failed to fetch user data:', error);
-        // If unauthorized, redirect to login
         if (error.response?.status === 401) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
@@ -46,7 +45,19 @@ const ProfilePage = () => {
       }
     };
 
+    const fetchPrompts = async () => {
+      try {
+        const response = await medicalService.getConfiguration();
+        if (response.success) {
+          setPrompts(response.prompts);
+        }
+      } catch (error) {
+        console.error('Failed to fetch prompts:', error);
+      }
+    };
+
     fetchUserData();
+    fetchPrompts();
     
     // Theme check
     const theme = localStorage.getItem('theme');
@@ -54,10 +65,6 @@ const ProfilePage = () => {
       setIsDarkMode(true);
       document.documentElement.classList.add('dark');
     }
-    
-    // Load prompts
-    const savedPrompts = localStorage.getItem('agent_prompts');
-    if (savedPrompts) setPrompts(JSON.parse(savedPrompts));
   }, []);
 
   const toggleTheme = () => {
@@ -79,9 +86,18 @@ const ProfilePage = () => {
     navigate('/login');
   };
 
-  const saveConfig = () => {
-    localStorage.setItem('agent_prompts', JSON.stringify(prompts));
-    alert('Configuration saved successfully!');
+  const saveConfig = async () => {
+    try {
+      setLoading(true);
+      const response = await medicalService.updateConfiguration(prompts);
+      if (response.success) {
+        console.log(response.message);
+      }
+    } catch (error) {
+      console.error('Failed to save config:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const tabs = [
@@ -135,25 +151,25 @@ const ProfilePage = () => {
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-2xl font-bold text-slate-800 dark:text-white">Agent Configuration</h3>
-              <Button onClick={saveConfig} className="!py-2">
+              <Button onClick={saveConfig} className="!py-2" disabled={loading}>
                 <Save size={18} /> Save
               </Button>
             </div>
-            <div className="space-y-6 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="space-y-6 overflow-y-auto pr-2 custom-scrollbar pb-10">
               <PromptEditor 
-                label="Clinical Agent Prompt" 
-                value={prompts.clinicalAgent} 
-                onChange={(val) => setPrompts({ ...prompts, clinicalAgent: val })}
+                label="Controller Agent (Planner)" 
+                value={prompts.CONTROLLER_AGENT} 
+                onChange={(val) => setPrompts({ ...prompts, CONTROLLER_AGENT: val })}
               />
               <PromptEditor 
-                label="Action Agent Prompt" 
-                value={prompts.actionAgent} 
-                onChange={(val) => setPrompts({ ...prompts, actionAgent: val })}
+                label="Clinical Agent (Diagnostic)" 
+                value={prompts.CLINICAL_AGENT} 
+                onChange={(val) => setPrompts({ ...prompts, CLINICAL_AGENT: val })}
               />
               <PromptEditor 
-                label="Chat Agent Prompt" 
-                value={prompts.chatAgent} 
-                onChange={(val) => setPrompts({ ...prompts, chatAgent: val })}
+                label="Chat Agent (Support)" 
+                value={prompts.CHAT_AGENT} 
+                onChange={(val) => setPrompts({ ...prompts, CHAT_AGENT: val })}
               />
             </div>
           </div>

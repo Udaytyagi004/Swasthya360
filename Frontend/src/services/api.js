@@ -95,6 +95,32 @@ export const medicalService = {
     } catch (error) {
       console.error('Logout Error:', error);
     }
+  },
+
+  /**
+   * Get system prompts configuration
+   */
+  async getConfiguration() {
+    try {
+      const response = await api.get('/user/configuration');
+      return response.data;
+    } catch (error) {
+      console.error('Get Config Error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update system prompts configuration
+   */
+  async updateConfiguration(prompts) {
+    try {
+      const response = await api.post('/user/configuration', { prompts });
+      return response.data;
+    } catch (error) {
+      console.error('Update Config Error:', error);
+      throw error;
+    }
   }
 };
 

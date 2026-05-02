@@ -1,6 +1,7 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { z } from "zod";
 import { ControllerSchema } from "../utils/schemas.js";
+import { SYSTEM_PROMPTS } from "../config/prompts.js";
 
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-3.1-flash-lite-preview",
@@ -10,30 +11,13 @@ const model = new ChatGoogleGenerativeAI({
 
 const controllerAgent = async (state) => {
   const structuredLlm = model.withStructuredOutput(ControllerSchema);
-  const systemPrompt = `
-You are a medical triage planner.
+  
+  // Inject state variables into the template string
+  let systemPrompt = SYSTEM_PROMPTS.CONTROLLER_AGENT
+    .replace("{{query}}", state.query || "None")
+    .replace("{{symptoms}}", state.symptoms?.join(", ") || "None")
+    .replace("{{severity}}", state.severity ?? "Unknown");
 
-Task:
-- Identify intent: "chat", "medical", or "emergency"
-- Return a minimal plan using available agents
-
-Agents:
-- clinicalAgent → diagnosis + risk
-- actionAgent → immediate steps
-- chatAgent → conversation / clarification
-
-Guidelines:
-- Chat → ["chatAgent"]
-- Medical → ["clinicalAgent", "actionAgent"]
-- Emergency OR severity > 7 → ["actionAgent"] first
-- If symptoms unclear → start with ["chatAgent"]
-- Keep plan minimal (only necessary steps)
-
-Input:
-Query: ${state.query || "None"}
-Symptoms: ${state.symptoms?.join(", ") || "None"}
-Severity: ${state.severity ?? "Unknown"}/10
-`;
   try {
     const response = await structuredLlm.invoke([
       ["system", systemPrompt],

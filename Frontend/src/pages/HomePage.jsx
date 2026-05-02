@@ -49,7 +49,11 @@ const HomePage = () => {
       }]);
 
       if (response.emergency_triggered) {
-        alert('EMERGENCY ALERT: High risk detected. Please seek immediate medical attention.');
+        console.warn('EMERGENCY ALERT: High risk detected.');
+        // Dispatch custom event for the notification system
+        window.dispatchEvent(new CustomEvent('emergency-alert', { 
+          detail: { message: 'Emergency alert sent to your contact.' } 
+        }));
       }
 
     } catch (err) {

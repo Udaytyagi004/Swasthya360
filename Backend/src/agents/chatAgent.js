@@ -1,4 +1,5 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { SYSTEM_PROMPTS } from "../config/prompts.js";
 
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-3-flash-lite-preview",
@@ -7,10 +8,7 @@ const model = new ChatGoogleGenerativeAI({
 });
 
 const chatAgent = async (state) => {
-  const systemPrompt = `You are a helpful and empathetic medical support assistant. 
-    You are here to answer general questions, provide support, or guide the user.
-    If the user reports specific symptoms or asks for a diagnosis, politely guide them to use the symptom diagnosis feature.
-    Keep your answers concise and supportive.`;
+  const systemPrompt = SYSTEM_PROMPTS.CHAT_AGENT;
 
   const query = state.query || "Hello";
 

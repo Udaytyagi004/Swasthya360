@@ -1,5 +1,6 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ClinicalAssessmentSchema } from "../utils/schemas.js";
+import { SYSTEM_PROMPTS } from "../config/prompts.js";
 
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-3.1-flash-lite-preview",
@@ -10,13 +11,7 @@ const model = new ChatGoogleGenerativeAI({
 const clinicalAgent = async (state) => {
   const structuredLlm = model.withStructuredOutput(ClinicalAssessmentSchema);
 
-  const systemPrompt = `You are a professional Medical Expert AI.
-  Analyze the patient's symptoms and provide a comprehensive clinical assessment.
-  
-  1. DIAGNOSIS: Provide a probable disease, confidence score, preventive measures, and cure.
-  2. RISK ASSESSMENT: Evaluate the medical urgency (Low, Medium, High, Emergency).
-  
-  CRITICAL: If symptoms are life-threatening (e.g., severe chest pain, inability to breathe), you MUST set riskLevel to 'Emergency' and isEmergency to true.`;
+  const systemPrompt = SYSTEM_PROMPTS.CLINICAL_AGENT;
 
   const inputContext = `
   Symptoms: ${state.symptoms ? state.symptoms.join(", ") : "None"}

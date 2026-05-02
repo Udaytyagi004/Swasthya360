@@ -4,10 +4,9 @@ const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 const sendEmergencyWhatsApp = async ({ to, message }) => {
   try {
-    // Format the phone number to E.164
     let formattedTo = to.trim();
     if (formattedTo.length === 10 && /^\d+$/.test(formattedTo)) {
-      formattedTo = `+91${formattedTo}`; // Default to India for 10-digit numbers
+      formattedTo = `+91${formattedTo}`;
     } else if (!formattedTo.startsWith("+")) {
       formattedTo = `+${formattedTo}`;
     }
