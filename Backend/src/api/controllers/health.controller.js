@@ -1,11 +1,23 @@
-import triageService from "../../orchestrator/orchestrator.js";
+import triageService from "../../services/triage.service.js";
 
 const handleHealthRequest = async (req, res) => {
-  const input = req.body;
+  try {
+    const input = {
+      ...req.body,
 
-  const result = await triageService(input);
+      user: {
+        name: req.user.name,
+        emergencyContact: req.user.emergencyContact,
+      },
+    };
 
-  res.json(result);
+    const result = await triageService(input);
+
+    res.json(result);
+  } catch (err) {
+    console.error("Health Request Error:", err.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export default handleHealthRequest;

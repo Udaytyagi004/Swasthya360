@@ -1,7 +1,7 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 const model = new ChatGoogleGenerativeAI({
-  model: "gemini-3.1-flash-lite-preview",
+  model: "gemini-3-flash-lite-preview",
   apiKey: process.env.GOOGLE_API_KEY,
   temperature: 0.7,
 });

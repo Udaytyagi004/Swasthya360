@@ -36,6 +36,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+
+    emergencyContact: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true },
 );

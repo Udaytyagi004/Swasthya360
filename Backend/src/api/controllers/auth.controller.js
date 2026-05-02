@@ -7,9 +7,13 @@ export const signup = async (req, res) => {
 
     const { user, token } = await signupService(validatedData);
     res.cookie("token", token);
-    res.status(201).send("SignUp succesful");
+    res.status(201).json({
+      message: "SignUp successful",
+      user,
+      token
+    });
   } catch (error) {
-    res.status(400).send("Error : " + error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -19,9 +23,13 @@ export const login = async (req, res) => {
 
     const { user, token } = await loginService(validatedData);
     res.cookie("token", token);
-    res.send("login Succesful");
+    res.json({
+      message: "Login successful",
+      user,
+      token
+    });
   } catch (error) {
-    res.status(400).send("Error : " + error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 

@@ -1,22 +1,11 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { z } from "zod";
+import { ControllerSchema } from "../utils/schemas.js";
 
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-3.1-flash-lite-preview",
   apiKey: process.env.GOOGLE_API_KEY,
   temperature: 0,
-});
-
-const ControllerSchema = z.object({
-  intent: z
-    .enum(["chat", "medical", "emergency"])
-    .describe("The understood intent of the user"),
-  plan: z
-    .array(z.string())
-    .describe(
-      "The list of agents to call in order. Options: diagnosisAgent, riskAgent, actionAgent, chatAgent",
-    ),
-  reasoning: z.string().describe("Brief explanation for the chosen plan"),
 });
 
 const controllerAgent = async (state) => {

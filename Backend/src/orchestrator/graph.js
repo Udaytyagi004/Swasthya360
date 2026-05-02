@@ -1,6 +1,6 @@
 import { StateGraph, START } from "@langchain/langgraph";
-import State from "./state.js";
-import controllerAgent from "./controller.js";
+import State from "./state/state.js";
+import controllerAgent from "../agents/controllerAgent.js";
 import { routeToNextAgent, incrementStep } from "./guards.js";
 
 import clinicalAgent from "../agents/clinicalAgent.js";

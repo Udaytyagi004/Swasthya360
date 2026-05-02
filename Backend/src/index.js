@@ -5,6 +5,7 @@ import connectDB from "./db/connection.js";
 import cookieParser from "cookie-parser";
 import authRouter from "./api/routes/auth.route.js";
 import healthRouter from "./api/routes/health.route.js";
+import userRouter from "./api/routes/user.route.js";
 
 const app = express();
 app.use(cors());
@@ -14,6 +15,7 @@ const PORT = process.env.PORT;
 
 app.use("/auth", authRouter);
 app.use("/health", healthRouter);
+app.use("/user", userRouter);
 
 connectDB()
   .then(() => {

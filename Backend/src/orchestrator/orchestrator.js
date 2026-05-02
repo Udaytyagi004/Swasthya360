@@ -1,4 +1,5 @@
 import graph from "./graph.js";
+import createInitialState from "./state/initState.js";
 
 const executeTriage = async (input) => {
   if (!input || typeof input !== "object") {
@@ -7,15 +8,7 @@ const executeTriage = async (input) => {
     );
   }
 
-  const initialState = {
-    query: input.query?.trim() || "",
-    symptoms: Array.isArray(input.symptoms) ? input.symptoms : [],
-    severity: Number(input.severity) || 0,
-    duration: input.duration || "Unknown",
-    context: input.context || {},
-    step: 0,
-    plan: [],
-  };
+  const initialState = createInitialState(input);
 
   console.log(
     `[Orchestrator] Initializing workflow engine for query: "${initialState.query.substring(0, 50)}..."`,

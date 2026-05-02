@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 import generateToken from "../utils/jwt.js";
 
 export const signupService = async (data) => {
-  const { name, email, password, age, gender, location } = data;
+  const { name, email, password, age, gender, location, emergencyContact } =
+    data;
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -19,6 +20,7 @@ export const signupService = async (data) => {
     age,
     gender,
     location,
+    emergencyContact,
   });
 
   const token = generateToken(user);

@@ -1,6 +1,10 @@
 import { Annotation } from "@langchain/langgraph";
 
 const State = Annotation.Root({
+  user: Annotation({
+    reducer: (oldVal, newVal) => newVal,
+    default: () => null,
+  }),
   query: Annotation(),
   symptoms: Annotation({ default: () => [] }),
   severity: Annotation({ default: () => 0 }),

@@ -27,6 +27,18 @@ export const ClinicalAssessmentSchema = z.object({
   riskAssessment: RiskAssessmentSchema,
 });
 
+export const ControllerSchema = z.object({
+  intent: z
+    .enum(["chat", "medical", "emergency"])
+    .describe("The understood intent of the user"),
+  plan: z
+    .array(z.string())
+    .describe(
+      "The list of agents to call in order. Options: diagnosisAgent, riskAgent, actionAgent, chatAgent",
+    ),
+  reasoning: z.string().describe("Brief explanation for the chosen plan"),
+});
+
 export const signupSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
@@ -34,6 +46,9 @@ export const signupSchema = z.object({
   age: z.number().min(0).max(120).optional(),
   gender: z.enum(["male", "female", "other"]).optional(),
   location: z.string().optional(),
+  emergencyContact: z
+    .string()
+    .regex(/^\+?[1-9]\d{9,14}$/, "Invalid phone number format"),
 });
 
 export const loginSchema = z.object({
