@@ -17,12 +17,16 @@ app.use("/auth", authRouter);
 app.use("/health", healthRouter);
 app.use("/user", userRouter);
 
-connectDB()
-  .then(() => {
-    app.listen(PORT, () =>
-      console.log(`Agent Microservice online on port ${PORT}`),
-    );
-  })
-  .catch((error) => {
-    console.error("Failed to connect to database. Server not started.", error);
-  });
+if (process.env.NODE_ENV !== "test") {
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () =>
+        console.log(`Agent Microservice online on port ${PORT}`)
+      );
+    })
+    .catch((error) => {
+      console.error("Failed to connect to database.", error);
+    });
+}
+
+  export default app
