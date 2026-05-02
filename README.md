@@ -4,9 +4,14 @@
 
 ---
 
+## Presentation
+
+https://drive.google.com/drive/folders/1wiVTpZRDN1xOzPOe1Cv7bZKJ1Trf_Tow?usp=drive_link
+
 ## 🌟 Theme: Agentic AI Systems
 
 This project is built strictly on **Agentic AI principles**. The system does not just reply to prompts; it:
+
 1.  **Takes a Goal**: Understands complex user medical queries.
 2.  **Reasons & Plans**: A central Controller Agent analyzes the intent and creates a multi-step execution plan.
 3.  **Executes Actions**: Modular agents carry out specific tasks (Diagnosis, Risk Assessment, Emergency Alerts).
@@ -24,19 +29,19 @@ Swasthya360 employs a modular, graph-based orchestration layer powered by **Lang
 graph TD
     User([User Input]) --> Orchestrator[Orchestrator / Workflow Engine]
     Orchestrator --> ControllerAgent{Controller Agent\n'The Planner'}
-    
+
     subgraph "Agentic Execution Layer"
     ControllerAgent -- "Plan: [Clinical, Action]" --> ClinicalAgent[Clinical Agent\n'The Diagnostic Expert']
     ClinicalAgent --> ActionAgent[Action Agent\n'The Executor']
     ControllerAgent -- "Plan: [Chat]" --> ChatAgent[Chat Agent\n'The Support Expert']
     end
-    
+
     ActionAgent --> WhatsAppTool[WhatsApp/SMS Tool\n'Twilio API']
-    
+
     ClinicalAgent -.-> State[(Global Workflow State)]
     ActionAgent -.-> State
     ChatAgent -.-> State
-    
+
     State --> Result([Final Response to User])
 ```
 
@@ -46,19 +51,19 @@ graph TD
 
 The system follows a rigorous **Reasoning → Planning → Execution** cycle:
 
-1.  **Reasoning (Controller Agent)**: 
-    *   Analyzes the user's query, symptoms, and reported severity.
-    *   Determines the intent: `chat`, `medical`, or `emergency`.
-    *   Outputs a **Reasoning Path** explaining why a specific plan was chosen.
+1.  **Reasoning (Controller Agent)**:
+    - Analyzes the user's query, symptoms, and reported severity.
+    - Determines the intent: `chat`, `medical`, or `emergency`.
+    - Outputs a **Reasoning Path** explaining why a specific plan was chosen.
 
 2.  **Planning**:
-    *   The Controller generates a sequence of agents to invoke.
-    *   *Example*: For a high-severity symptom, the plan might be `["clinicalAgent", "actionAgent"]`.
+    - The Controller generates a sequence of agents to invoke.
+    - _Example_: For a high-severity symptom, the plan might be `["clinicalAgent", "actionAgent"]`.
 
 3.  **Execution (Specialized Agents)**:
-    *   **Clinical Agent**: Uses Gemini 3.1 Flash to provide a structured medical assessment (Diagnosis, Confidence, Preventive Measures).
-    *   **Action Agent**: Decides if an emergency alert is needed based on the assessment and triggers the `whatsappTool` if necessary.
-    *   **Chat Agent**: Handles non-medical queries with empathy and guidance.
+    - **Clinical Agent**: Uses Gemini 3.1 Flash to provide a structured medical assessment (Diagnosis, Confidence, Preventive Measures).
+    - **Action Agent**: Decides if an emergency alert is needed based on the assessment and triggers the `whatsappTool` if necessary.
+    - **Chat Agent**: Handles non-medical queries with empathy and guidance.
 
 ---
 
@@ -69,15 +74,17 @@ In compliance with hackathon guidelines, all AI prompts are **not hidden in code
 📍 **Path**: [`Backend/src/config/prompts.js`](file:///c:/Users/Uday%20Narayan/Swasthya360/Backend/src/config/prompts.js)
 
 This file contains the system instructions for:
-*   `CONTROLLER_AGENT`: Logic for intent classification and workflow planning.
-*   `CLINICAL_AGENT`: Medical expertise and risk assessment guidelines.
-*   `CHAT_AGENT`: Conversational tone and boundary setting.
+
+- `CONTROLLER_AGENT`: Logic for intent classification and workflow planning.
+- `CLINICAL_AGENT`: Medical expertise and risk assessment guidelines.
+- `CHAT_AGENT`: Conversational tone and boundary setting.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v18+)
 - Gemini API Key
 - Twilio Account (for WhatsApp alerts)
@@ -85,12 +92,14 @@ This file contains the system instructions for:
 ### Installation
 
 1.  **Clone the Repository**:
+
     ```bash
     git clone https://github.com/Udaytyagi004/Swasthya360.git
     cd Swasthya360
     ```
 
 2.  **Backend Setup**:
+
     ```bash
     cd Backend
     npm install
@@ -128,5 +137,3 @@ Detailed test cases and documentation can be found in [**API_TESTING.md**](file:
 - **Validation**: Zod (Structured Outputs)
 
 ---
-
-
