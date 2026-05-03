@@ -121,7 +121,7 @@ This file contains the system instructions for:
 We ensure reliability through multiple testing layers:
 
 1.  **Manual UI Testing**: Validating the end-to-end flow from symptom input to alert delivery.
-2.  **API Testing**: Structured validation of the `/api/health/triage` endpoint using tools like Postman or the built-in testing scripts.
+2.  **API Testing**: Structured validation of the `/health/services` endpoint using tools like Postman or the built-in testing scripts.
 
 Detailed test cases and documentation can be found in [**API_TESTING.md**](file:///c:/Users/Uday%20Narayan/Swasthya360/API_TESTING.md).
 
